@@ -51,9 +51,52 @@ int main(int argc, char** argv) {
   cnn::Initialize(argc, argv);
 ```
 
-### Defining hyperparameters
+```Initialize()``` initializes a scratch space for computation. In the future, this may be used for better ways of
+initializing memory for the model parameters and the computation graph.
 
-### 
+### Defining hyperparameters
+Hyperparamters are distinct from the parameters of the model and in the case of neural networks,
+describe things like the model structure (eg. number of nodes in the hidden state) or parameters
+for the learning algorithm (eg. learning rate, batch size). We will use two of these in our
+implementation of the XOR network.
+
+```cpp
+// hyper-parameters
+const unsigned HIDDEN_SIZE = 8;
+const unsigned ITERATIONS = 30;
+```
+HIDDEN_SIZE is the size of the hidden layer and ITERATIONS is the maximum
+number of iterations for which SGD (the parameter learning) algorithm will
+run.
+
+### Initializing model and its parameters
+Our goal is to learn the parameters (vectors, tensors) of a model given some data the we observe.
+We initialize a model and malloc memory for its parameters. For the model, we
+also specify a learning algorithm (SGD in this case)
+
+```cpp
+Model m;
+SimpleSGDTrainer sgd(&m);
+
+Parameters& p_a = *m.add_parameters({1});
+Parameters& p_b1 = *m.add_parameters({HIDDEN_SIZE/2});
+Parameters& p_b2 = *m.add_parameters({HIDDEN_SIZE/2});
+Parameters& p_W = *m.add_parameters({HIDDEN_SIZE, 2});
+Parameters& p_V = *m.add_parameters({1, HIDDEN_SIZE});
+```
+A couple of things are worth elaboration. First, the "Model" keeps track
+of the parameters (and by extension their location in memory). CNN uses
+this information and passes pointers to these memory locations to Eigen
+when necessary. It also provides functions such as `load` and `save` for
+parameters to perform disk writing and reading.
+
+`add_parameters` is used to add parameters to the model. It takes
+the size of the parameter as an argument. Examples:
+* add_parameters({N}) : Vector of size N
+* add_parameters({N, 2}) : Matrix of size Nx2
+* add_parameters({1, N}) : Column vector of size 1xN
+
+### Initializing the computational graph
 
 ```cpp
 #include "cnn/edges.h"
