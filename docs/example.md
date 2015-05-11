@@ -1,3 +1,21 @@
+# Introduction
+CNN is a toolkit in C++ for specifying and working with neural networks. Specifically,
+the goal of the toolkit to allow straightforward definitions of neural architectures
+in the form of symbolic computational graphs. Nodes in this graph, also called the 
+symbolic objects are typically scalars, vectors or tensors representing input, parameters
+or internal states of the neural network. Operations on nodes in this graph typically
+belong to a small set (concatenation, non-linear functions, semiring operations, softmax, etc.).
+CNN makes creating nodes and operations on the hypergraph fairly straightforward. Through this
+example, we will explore some of the basic features provided by CNN. In the course of this tutorial,
+we may also explore some advanced topics and suggest topics further reading and exploration.
+
+# XOR with a Multi-layer Perceptron
+The example we will work with is a simple feed-forward neural network
+([the multi-layer perceptron](http://en.wikipedia.org/wiki/Feedforward_neural_network#Multi-layer_perceptron))
+which can implement the XOR operation. The complete code for this example is at examples/xor.cc. If you
+have already built CNN, a binary for this example can be found at build/examples/xor and can be run.
+
+
 ```cpp
 #include "cnn/edges.h"
 #include "cnn/cnn.h"
