@@ -84,7 +84,7 @@ Parameters& p_b2 = *m.add_parameters({HIDDEN_SIZE/2});
 Parameters& p_W = *m.add_parameters({HIDDEN_SIZE, 2});
 Parameters& p_V = *m.add_parameters({1, HIDDEN_SIZE});
 ```
-A couple of things are worth elaboration. First, the "Model" keeps track
+A couple of things are worth elaboration. First, the `Model` keeps track
 of the parameters (and by extension their location in memory). CNN uses
 this information and passes pointers to these memory locations to Eigen
 when necessary. It also provides functions such as `load` and `save` for
@@ -92,11 +92,31 @@ parameters to perform disk writing and reading.
 
 `add_parameters` is used to add parameters to the model. It takes
 the size of the parameter as an argument. Examples:
-* add_parameters({N}) : Vector of size N
-* add_parameters({N, 2}) : Matrix of size Nx2
-* add_parameters({1, N}) : Column vector of size 1xN
+* `add_parameters({N})` : Vector of size N
+* `add_parameters({N, 2})` : Matrix of size Nx2
+* `add_parameters({1, N})` : Column vector of size 1xN
 
 ### Initializing the computational graph
+The symbolic computational graph is called a
+in the CNN framework (actually, the symbolic graph IS a 
+[hypergraph](http://en.wikipedia.org/wiki/Hypergraph).
+```cpp
+// build the graph
+Hypergraph hg;
+
+// get symbolic variables corresponding to parameters
+VariableIndex i_b1 = hg.add_parameter(&p_b1);
+VariableIndex i_b2 = hg.add_parameter(&p_b2);
+VariableIndex i_b = hg.add_function<Concatenate>({i_b1, i_b2});
+VariableIndex i_a = hg.add_parameter(&p_a);
+VariableIndex i_W = hg.add_parameter(&p_W);
+VariableIndex i_V = hg.add_parameter(&p_V);
+
+vector<float> x_values(2);  // set x_values to change the inputs to the network
+VariableIndex i_x = hg.add_input({2}, &x_values);
+cnn::real y_value;  // set y_value to change the target output
+VariableIndex i_y = hg.add_input(&y_value);
+```
 
 ```cpp
 #include "cnn/edges.h"
