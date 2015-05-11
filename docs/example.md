@@ -15,6 +15,45 @@ The example we will work with is a simple feed-forward neural network
 which can implement the XOR operation. The complete code for this example is at examples/xor.cc. If you
 have already built CNN, a binary for this example can be found at build/examples/xor and can be run.
 
+## The structure of a neural network specification with CNN
+The general workflow of implementing a neural network would be the following : 
+```cpp
+// 1. Include CNN headers
+
+int main(int argc, char** argv) {
+  cnn::Initialize(argc, argv);
+  
+  // 2. Define and initialize hyperparameters
+  
+  // 3. Define model, inputs and parameters
+
+  // 4. Build the symbolic (hyper)graph
+
+  //    4.1 Add symbolic nodes
+
+  //    4.2 Define operations on nodes
+
+  // 5. Training parameters
+}
+```
+### CNN headers and initialization
+Three header files and the cnn namespace contain the bulk of the functionality available through CNN.
+We start by including these.
+```cpp
+#include "cnn/edges.h"
+#include "cnn/cnn.h"
+#include "cnn/training.h"
+...
+
+using namespace cnn;
+
+int main(int argc, char** argv) {
+  cnn::Initialize(argc, argv);
+```
+
+### Defining hyperparameters
+
+### 
 
 ```cpp
 #include "cnn/edges.h"
